@@ -1266,7 +1266,7 @@ ndp120_app_device_health_check(void)
 
 	while (1) {
 		ndp120_semtake(dev);
-		(void)pm_suspend(dev->pm_id);
+		(void)pm_suspend(dev->pm_domain);
 		/* If KD Change requested, then skip checking */
 		if (!dev->kd_changed) {
 			s = check_firmware_aliveness(dev, wait_period_ms);
@@ -1275,7 +1275,7 @@ ndp120_app_device_health_check(void)
 				printf("Error: %d in check_firmware_aliveness\n", s);
 			}
 		}
-		(void)pm_resume(dev->pm_id);
+		(void)pm_resume(dev->pm_domain);
 		ndp120_semgive(dev);
 		usleep(NDP_ALIVENESS_CHECK_PERIOD_US);
 	}
@@ -1290,13 +1290,13 @@ int ndp120_init(struct ndp120_dev_s *dev, bool reinit)
 	/* File names */
 	int s;
 
-	const char *mcu_package = "/mnt/kernel/audio/mcu_fw";
-	const char *dsp_package = "/mnt/kernel/audio/dsp_fw";
+	const char *mcu_package = "/res/kernel/audio/mcu_fw";
+	const char *dsp_package = "/res/kernel/audio/dsp_fw";
 	const char *neural_package;
 	if (dev->kd_num == 0) {
-		neural_package = "/mnt/kernel/model/kd_local";
+		neural_package = "/res/kernel/audio/kd_local";
 	} else {
-		neural_package = "/mnt/kernel/model/kd_local2";
+		neural_package = "/res/kernel/audio/kd_local2";
 	}
 
 
